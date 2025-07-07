@@ -7,4 +7,4 @@ Requirements:
 How to run:
 1. Start MySql and create database "myappdb"
 2. cd BasketballStats   ./mvnw spring-boot:run
-3.  cd BasketballStats   cd frontend   pm install   npm start
+3.  cd BasketballStats   cd frontend   npm install   npm start
