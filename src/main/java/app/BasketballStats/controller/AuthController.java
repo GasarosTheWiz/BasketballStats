@@ -15,7 +15,6 @@ public class AuthController {
 
     @Autowired
     private AppUserRepository userRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -33,8 +32,7 @@ public class AuthController {
         boolean valid = userRepository.findByUsername(username)
             .map(dbUser -> passwordEncoder.matches(password, dbUser.getPassword()))
             .orElse(false);
-
-        Map<String, Boolean> response = new HashMap<>();
+        Map<String, Boolean> response =new HashMap<>();
         response.put("valid", valid);
         return ResponseEntity.ok(response);
     }

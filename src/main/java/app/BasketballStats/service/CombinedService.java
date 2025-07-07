@@ -11,7 +11,6 @@ import app.BasketballStats.repository.PlayerStatsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -58,7 +57,7 @@ public class CombinedService {
 
         statsRepository.save(stats);
 
-        logger.info("Successfully created combined entry with Player ID: {}, Game ID: {}, Stats ID: {}",
+        logger.info("Successfully created Player ID: {}, Game ID: {}, Stats ID: {}",
                 player.getId(), game.getId(), stats.getId());
     }
 
@@ -87,8 +86,7 @@ public class CombinedService {
         stats.setFtScored(dto.ftScored());
         stats.setFtShot(dto.ftShot());
         statsRepository.save(stats);
-
-        logger.info("Successfully updated combined entry.");
+        logger.info("Successfully updated.");
     }
 
     public void deleteAllByIds(Long playerId, Long gameId, Long statsId) {
@@ -98,7 +96,7 @@ public class CombinedService {
         }
         if (playerRepository.existsById(playerId)) {
             playerRepository.deleteById(playerId);
-            logger.info("Deleted player with id={}", playerId);
+            logger.info("Deleted player with id={}",playerId);
         }
         if (gameRepository.existsById(gameId)) {
             gameRepository.deleteById(gameId);

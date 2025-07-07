@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -28,7 +26,7 @@ public class PlayerStatsServiceIntegrationTest {
     private Game game;
     private PlayerStats stats;
     @BeforeEach
-    public void setup() {
+    public void setup(){
         statsRepo.deleteAll();
         playerRepo.deleteAll();
         gameRepo.deleteAll();

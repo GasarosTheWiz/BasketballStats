@@ -13,7 +13,7 @@ function Login({ onLogin }) {
     axios.get(`http://localhost:8080/users/check`, { params: { username, password } })
       .then(res => {
         if (res.data.valid) {
-          onLogin(); // call parent onLogin if elements are valid
+          onLogin();
         } else {
           alert('Invalid.');
         }
@@ -34,7 +34,7 @@ function Login({ onLogin }) {
         alert('Registration failed');
       });
   };
-
+  
   return (
     <div className="login-container">
       <video autoPlay loop muted playsInline className="background-video">
