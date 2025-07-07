@@ -1,4 +1,5 @@
 package app.BasketballStats.service;
+
 import app.BasketballStats.dto.CombinedInsertDTO;
 import app.BasketballStats.dto.CombinedUpdateDTO;
 import app.BasketballStats.model.Game;
@@ -10,12 +11,15 @@ import app.BasketballStats.repository.PlayerStatsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Service
 public class CombinedService {
-    private static final Logger logger= LoggerFactory.getLogger(CombinedService.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(CombinedService.class);
+
     private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
     private final PlayerStatsRepository statsRepository;
@@ -27,16 +31,16 @@ public class CombinedService {
         this.gameRepository = gameRepository;
         this.statsRepository = statsRepository;
     }
-    
-    
+
     public void createCombinedEntry(CombinedInsertDTO dto) {
-        Player player =new Player();
+
+        Player player = new Player();
         player.setName(dto.playerName());
         player.setPosition(dto.position());
         player.setNumber(dto.number());
-        player= playerRepository.save(player);
+        player = playerRepository.save(player);
 
-        Game game =new Game();
+        Game game = new Game();
         LocalDate date = LocalDate.parse(dto.gameDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         game.setDate(date);
         game.setOpponent(dto.opponent());
@@ -53,9 +57,13 @@ public class CombinedService {
         stats.setFtShot(dto.ftShot());
 
         statsRepository.save(stats);
+
+        logger.info("Successfully created combined entry with Player ID: {}, Game ID: {}, Stats ID: {}",
+                player.getId(), game.getId(), stats.getId());
     }
-    
+
     public void updateCombinedEntry(CombinedUpdateDTO dto) {
+
         Player player = playerRepository.findById(dto.playerId())
                 .orElseThrow(() -> new RuntimeException("Player not found"));
         player.setName(dto.playerName());
@@ -69,6 +77,7 @@ public class CombinedService {
         game.setDate(date);
         game.setOpponent(dto.opponent());
         gameRepository.save(game);
+
         PlayerStats stats = statsRepository.findById(dto.statsId())
                 .orElseThrow(() -> new RuntimeException("Stats not found"));
         stats.setTwoPScored(dto.twoPScored());
@@ -78,16 +87,18 @@ public class CombinedService {
         stats.setFtScored(dto.ftScored());
         stats.setFtShot(dto.ftShot());
         statsRepository.save(stats);
+
+        logger.info("Successfully updated combined entry.");
     }
 
     public void deleteAllByIds(Long playerId, Long gameId, Long statsId) {
-        if (statsRepository.existsById(statsId)){
+        if (statsRepository.existsById(statsId)) {
             statsRepository.deleteById(statsId);
-            logger.info("Deleted stats with id={}",statsId);
+            logger.info("Deleted stats with id={}", statsId);
         }
         if (playerRepository.existsById(playerId)) {
             playerRepository.deleteById(playerId);
-            logger.info("Deleted player with id={}",playerId);
+            logger.info("Deleted player with id={}", playerId);
         }
         if (gameRepository.existsById(gameId)) {
             gameRepository.deleteById(gameId);

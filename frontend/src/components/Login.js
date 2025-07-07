@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../App.css';
 
-function Login({onLogin}) {
-  const[username, setUsername] =useState('');
+function Login({ onLogin }) {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showRegister, setShowRegister] = useState(false);
 
   //login
-  const handleSubmit = (e)=> {
+  const handleSubmit = (e) => {
     e.preventDefault();
     axios.get(`http://localhost:8080/users/check`, { params: { username, password } })
       .then(res => {
@@ -18,20 +18,21 @@ function Login({onLogin}) {
           alert('Invalid.');
         }
       })
-      .catch(() =>alert('Error connecting to server'));
+      .catch(() => alert('Error connecting to server'));
   };
+
   //register
-  const handleRegister =(e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8080/users", {username, password })
-    .then(() =>{
-      alert(`User ${username} registered!`);
-      setShowRegister(false);
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Registration failed');
-    });
+    axios.post("http://localhost:8080/users", { username, password })
+      .then(() => {
+        alert(`User ${username} registered!`);
+        setShowRegister(false);
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Registration failed');
+      });
   };
 
   return (
@@ -41,15 +42,15 @@ function Login({onLogin}) {
       </video>
       <div className="login-panel">
         <h2>Login</h2>
-        <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection: 'column', gap: '15px' }}>
-          <input 
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-          <input 
+          <input
             type="password"
             placeholder="Password"
             value={password}
@@ -88,4 +89,5 @@ function Login({onLogin}) {
     </div>
   );
 }
+
 export default Login;

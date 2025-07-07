@@ -2,6 +2,8 @@ package app.BasketballStats.controller;
 import app.BasketballStats.model.AppUser;
 import app.BasketballStats.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,17 +15,27 @@ public class AuthController {
 
     @Autowired
     private AppUserRepository userRepository;
-    //register
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // Register user
     @PostMapping
-    public AppUser register(@RequestBody AppUser user) {
-        return userRepository.save(user);
+    public ResponseEntity<AppUser> register(@RequestBody AppUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        AppUser savedUser = userRepository.save(user);
+        return ResponseEntity.ok(savedUser);
     }
-    // Check for login
+
+    //check login
     @GetMapping("/check")
-    public Map<String, Boolean> check(@RequestParam String username, @RequestParam String password) {
-        boolean exists = userRepository.findByUsernameAndPassword(username, password).isPresent();
+    public ResponseEntity<Map<String, Boolean>> check(@RequestParam String username, @RequestParam String password) {
+        boolean valid = userRepository.findByUsername(username)
+            .map(dbUser -> passwordEncoder.matches(password, dbUser.getPassword()))
+            .orElse(false);
+
         Map<String, Boolean> response = new HashMap<>();
-        response.put("valid", exists);
-        return response;
+        response.put("valid", valid);
+        return ResponseEntity.ok(response);
     }
 }
